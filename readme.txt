@@ -1,29 +1,25 @@
+My mod changes all weapons so they have 2 buffs and 1 debuff. The buffs and debuffs are randomly assigned from a list of 10 buffs and 5
+debuffs when the weapon spawns. You'll be limited to one weapon at a time, so you'll have to drop your weapon to switch. As you kill
+enemies, you gain experience. Once you gain enough experience, your weapon will level up, which increases the strength of your buffs 
+while lowering the strength of your debuffs. If you drop a weapon, all experience gained with it will be gone, even if you pick it 
+back up immediately. You can check what buffs and debuffs you have with F. It'll also show you how much experience you have.
 
-This is the complete source code for Quake 2, version 3.19, buildable with
-visual C++ 6.0.  The linux version should be buildable, but we haven't
-tested it for the release.
+Buffs
+-----
+1.Increased clip size
+2.Decreased spread
+3.increased damage
+4.increased rate of fire
+5.increased reload speed
+6.healing bullets
+7.more ammo from pickups
+8.increased ammo reserves
+9.lower ammo consumption
 
-The code is all licensed under the terms of the GPL (gnu public license).  
-You should read the entire license, but the gist of it is that you can do 
-anything you want with the code, including sell your new version.  The catch 
-is that if you distribute new binary versions, you are required to make the 
-entire source code available for free to everyone.
-
-The primary intent of this release is for entertainment and educational 
-purposes, but the GPL does allow commercial exploitation if you obey the 
-full license.  If you want to do something commercial and you just can't bear 
-to have your source changes released, we could still negotiate a separate 
-license agreement (for $$$), but I would encourage you to just live with the 
-GPL.
-
-All of the Q2 data files remain copyrighted and licensed under the 
-original terms, so you cannot redistribute data from the original game, but if 
-you do a true total conversion, you can create a standalone game based on 
-this code.
-
-Thanks to Robert Duffy for doing the grunt work of building this release.
-
-John Carmack
-Id Software
-
-
+Debuffs
+--------
+1.Decreased damage
+2.decreased reload speed
+3.increased spread
+4.decreased rate of fire
+5.double ammo consumption
