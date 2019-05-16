@@ -1069,11 +1069,25 @@ void Machinegun_Fire(edict_t *ent)
 		return;
 	}
 
+	if (!strcmp(ent->client->pers.weapon->buffs[0].name, "Inc. Damage") || !strcmp(ent->client->pers.weapon->buffs[1].name, "Inc. Damage")){
+		int index;
+		index = FindBuff(ent->client->pers.weapon, "Inc. Damage");
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 1)
+			damage *= 2;
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 2)
+			damage *= 3;
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 3)
+			damage *= 4;
+	}
+
 	if (is_quad)
 	{
 		damage *= 4;
 		kick *= 4;
 	}
+
 
 	for (i = 1; i < 3; i++)
 	{
@@ -1239,6 +1253,19 @@ void Chaingun_Fire (edict_t *ent)
 		return;
 	}
 
+	if (!strcmp(ent->client->pers.weapon->buffs[0].name, "Inc. Damage") || !strcmp(ent->client->pers.weapon->buffs[1].name, "Inc. Damage")){
+		int index;
+		index = FindBuff(ent->client->pers.weapon, "Inc. Damage");
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 1)
+			damage *= 2;
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 2)
+			damage *= 3;
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 3)
+			damage *= 4;
+	}
+
 	if (is_quad)
 	{
 		damage *= 4;
@@ -1341,6 +1368,19 @@ void weapon_shotgun_fire (edict_t *ent)
 	VectorSet(offset, 0, 8,  ent->viewheight-8);
 	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
 
+	if (!strcmp(ent->client->pers.weapon->buffs[0].name, "Inc. Damage") || !strcmp(ent->client->pers.weapon->buffs[1].name, "Inc. Damage")){
+		int index;
+		index = FindBuff(ent->client->pers.weapon, "Inc. Damage");
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 1)
+			damage *= 2;
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 2)
+			damage *= 3;
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 3)
+			damage *= 4;
+	}
+
 	if (is_quad)
 	{
 		damage *= 4;
@@ -1416,6 +1456,32 @@ void weapon_supershotgun_fire (edict_t *ent)
 
 	VectorSet(offset, 0, 8,  ent->viewheight-8);
 	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
+
+	if (!strcmp(ent->client->pers.weapon->buffs[0].name, "Inc. Damage") || !strcmp(ent->client->pers.weapon->buffs[1].name, "Inc. Damage")){
+		int index;
+		index = FindBuff(ent->client->pers.weapon, "Inc. Damage");
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 1)
+			damage *= 2;
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 2)
+			damage *= 3;
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 3)
+			damage *= 4;
+	}
+
+	if (!strcmp(ent->client->pers.weapon->buffs[0].name, "Inc. Damage") || !strcmp(ent->client->pers.weapon->buffs[1].name, "Inc. Damage")){
+		int index;
+		index = FindBuff(ent->client->pers.weapon, "Inc. Damage");
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 1)
+			damage *= 2;
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 2)
+			damage *= 3;
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 3)
+			damage *= 4;
+	}
 
 	if (is_quad)
 	{
@@ -1506,6 +1572,19 @@ void weapon_railgun_fire (edict_t *ent)
 	{
 		damage = 150;
 		kick = 250;
+	}
+	
+	if (!strcmp(ent->client->pers.weapon->buffs[0].name, "Inc. Damage") || !strcmp(ent->client->pers.weapon->buffs[1].name, "Inc. Damage")){
+		int index;
+		index = FindBuff(ent->client->pers.weapon, "Inc. Damage");
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 1)
+			damage *= 2;
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 2)
+			damage *= 3;
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 3)
+			damage *= 4;
 	}
 
 	if (is_quad)
@@ -1612,6 +1691,19 @@ void weapon_bfg_fire (edict_t *ent)
 	{
 		ent->client->ps.gunframe++;
 		return;
+	}
+
+	if (!strcmp(ent->client->pers.weapon->buffs[0].name, "Inc. Damage") || !strcmp(ent->client->pers.weapon->buffs[1].name, "Inc. Damage")){
+		int index;
+		index = FindBuff(ent->client->pers.weapon, "Inc. Damage");
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 1)
+			damage *= 2;
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 2)
+			damage *= 3;
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 3)
+			damage *= 4;
 	}
 
 	if (is_quad)
