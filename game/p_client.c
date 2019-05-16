@@ -622,7 +622,6 @@ void InitClientPersistant (gclient_t *client)
 
 	client->pers.exp = 0;
 
-
 	srand(time(NULL));
 	AssignBuffs(client->pers.weapon, 0);
 	
@@ -633,6 +632,12 @@ void InitClientPersistant (gclient_t *client)
 	client->pers.max_grenades	= 50;
 	client->pers.max_cells		= 200;
 	client->pers.max_slugs		= 50;
+
+	int			index;
+	gitem_t		*ammo;
+	index = ITEM_INDEX(item);
+	ammo = FindItem(item->ammo);
+	Add_Ammo(client->player, ammo, ammo->quantity);
 
 	client->pers.connected = true;
 }
@@ -1489,6 +1494,7 @@ qboolean ClientConnect (edict_t *ent, char *userinfo)
 		// clear the respawning variables
 		InitClientResp (ent->client);
 		if (!game.autosaved || !ent->client->pers.weapon)
+			ent->client->player = ent;
 			InitClientPersistant (ent->client);
 	}
 
