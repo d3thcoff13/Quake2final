@@ -433,13 +433,16 @@ void Cmd_Buffs_f(edict_t *ent)
 
 void Cmd_SetBuffs_f(edict_t *ent)
 {
-
-	ent->client->pers.weapon->buffs[1].name = "Dec. Ammo Consumption";
+	float flo;
+	flo = crandom();
+	ent->client->pers.weapon->buffs[1].name = "Inc. Accuracy";
 	ent->client->pers.weapon->buffs[0].currentLevel = 1;
 	ent->client->pers.weapon->buffs[0].name = "Extended Clip";
 	ent->client->pers.weapon->buffs[1].currentLevel = 1;
 	ent->client->pers.weapon->buffs[2].name = "Decreased Accuracy";
 	ent->client->pers.weapon->buffs[2].currentLevel = 1;
+
+	gi.cprintf(ent, PRINT_HIGH, "%f", flo);
 }
 /*
 ==================

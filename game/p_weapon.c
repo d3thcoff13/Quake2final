@@ -159,11 +159,10 @@ qboolean Pickup_Weapon (edict_t *ent, edict_t *other)
 		ChangeWeapon(other);
 		return true;
 	}
-	else
-	{
-		gi.centerprintf(other, "cannot hold more than 1 weapon");
-		return false;
-	}
+	if (ent->item->flags & IT_AMMO)
+		return true;
+	gi.centerprintf(other, "cannot hold more than 1 weapon");
+	return false;
 }
 
 
@@ -743,8 +742,34 @@ void weapon_grenadelauncher_fire (edict_t *ent)
 
 	PlayerNoise(ent, start, PNOISE_WEAPON);
 
-	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
+	if (!(((int)dmflags->value & DF_INFINITE_AMMO) || !strcmp(ent->client->pers.weapon->buffs[0].name, "Dec. Ammo Consumption") ||
+		!strcmp(ent->client->pers.weapon->buffs[1].name, "Dec. Ammo Consumption"))){
 		ent->client->pers.inventory[ent->client->ammo_index]--;
+	}
+	else if (!((int)dmflags->value & DF_INFINITE_AMMO)){
+
+		int odds;
+		int index;
+
+		index = FindBuff(ent->client->pers.weapon, "Dec. Ammo Consumption");
+
+		odds = rand() % 100 + 1;
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 1){
+			if (odds >= 10)
+				ent->client->pers.inventory[ent->client->ammo_index]--;
+		}
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 2){
+			if (odds >= 20)
+				ent->client->pers.inventory[ent->client->ammo_index]--;
+		}
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 3){
+			if (odds >= 30)
+				ent->client->pers.inventory[ent->client->ammo_index]--;
+		}
+	}
 }
 
 void Weapon_GrenadeLauncher (edict_t *ent)
@@ -799,8 +824,34 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 
 	PlayerNoise(ent, start, PNOISE_WEAPON);
 
-	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
+	if (!(((int)dmflags->value & DF_INFINITE_AMMO) || !strcmp(ent->client->pers.weapon->buffs[0].name, "Dec. Ammo Consumption") ||
+		!strcmp(ent->client->pers.weapon->buffs[1].name, "Dec. Ammo Consumption"))){
 		ent->client->pers.inventory[ent->client->ammo_index]--;
+	}
+	else if (!((int)dmflags->value & DF_INFINITE_AMMO)){
+
+		int odds;
+		int index;
+
+		index = FindBuff(ent->client->pers.weapon, "Dec. Ammo Consumption");
+
+		odds = rand() % 100 + 1;
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 1){
+			if (odds >= 10)
+				ent->client->pers.inventory[ent->client->ammo_index]--;
+		}
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 2){
+			if (odds >= 20)
+				ent->client->pers.inventory[ent->client->ammo_index]--;
+		}
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 3){
+			if (odds >= 30)
+				ent->client->pers.inventory[ent->client->ammo_index]--;
+		}
+	}
 }
 
 void Weapon_RocketLauncher (edict_t *ent)
@@ -912,8 +963,35 @@ void Weapon_HyperBlaster_Fire (edict_t *ent)
 			else
 				damage = 20;
 			Blaster_Fire (ent, offset, damage, true, effect);
-			if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
+			
+			if (!(((int)dmflags->value & DF_INFINITE_AMMO) || !strcmp(ent->client->pers.weapon->buffs[0].name, "Dec. Ammo Consumption") || 
+				!strcmp(ent->client->pers.weapon->buffs[1].name, "Dec. Ammo Consumption"))){
 				ent->client->pers.inventory[ent->client->ammo_index]--;
+			}
+			else if (!((int)dmflags->value & DF_INFINITE_AMMO)){
+		
+				int odds;
+				int index;
+		
+				index = FindBuff(ent->client->pers.weapon, "Dec. Ammo Consumption");
+		
+				odds = rand() % 100 + 1;
+		
+				if (ent->client->pers.weapon->buffs[index].currentLevel == 1){
+					if (odds >= 10)
+						ent->client->pers.inventory[ent->client->ammo_index]--;
+				}
+
+				if (ent->client->pers.weapon->buffs[index].currentLevel == 2){
+					if (odds >= 20)
+						ent->client->pers.inventory[ent->client->ammo_index]--;
+				}
+		
+				if (ent->client->pers.weapon->buffs[index].currentLevel == 3){
+					if (odds >= 30)
+						ent->client->pers.inventory[ent->client->ammo_index]--;
+				}
+			}
 
 			ent->client->anim_priority = ANIM_ATTACK;
 			if (ent->client->ps.pmove.pm_flags & PMF_DUCKED)
@@ -957,7 +1035,7 @@ MACHINEGUN / CHAINGUN
 ======================================================================
 */
 
-void Machinegun_Fire (edict_t *ent)
+void Machinegun_Fire(edict_t *ent)
 {
 	int	i;
 	vec3_t		start;
@@ -987,7 +1065,7 @@ void Machinegun_Fire (edict_t *ent)
 			gi.sound(ent, CHAN_VOICE, gi.soundindex("weapons/noammo.wav"), 1, ATTN_NORM, 0);
 			ent->pain_debounce_time = level.time + 1;
 		}
-		NoAmmoWeaponChange (ent);
+		NoAmmoWeaponChange(ent);
 		return;
 	}
 
@@ -997,13 +1075,14 @@ void Machinegun_Fire (edict_t *ent)
 		kick *= 4;
 	}
 
-	for (i=1 ; i<3 ; i++)
+	for (i = 1; i < 3; i++)
 	{
-		ent->client->kick_origin[i] = crandom() * 0.35;
-		ent->client->kick_angles[i] = crandom() * 0.7;
+	ent->client->kick_origin[i] = crandom() * 0.35;
+	ent->client->kick_angles[i] = crandom() * 0.7;
 	}
-	ent->client->kick_origin[0] = crandom() * 0.35;
-	ent->client->kick_angles[0] = ent->client->machinegun_shots * -1.5;
+	
+		ent->client->kick_origin[0] = crandom() * 0.35;
+		ent->client->kick_angles[0] = ent->client->machinegun_shots * -1.5;
 
 	// raise the gun as it is firing
 	if (!deathmatch->value)
@@ -1014,21 +1093,47 @@ void Machinegun_Fire (edict_t *ent)
 	}
 
 	// get start / end positions
-	VectorAdd (ent->client->v_angle, ent->client->kick_angles, angles);
-	AngleVectors (angles, forward, right, NULL);
-	VectorSet(offset, 0, 8, ent->viewheight-8);
-	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
-	fire_bullet (ent, start, forward, damage, kick, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, MOD_MACHINEGUN);
+	VectorAdd(ent->client->v_angle, ent->client->kick_angles, angles);
+	AngleVectors(angles, forward, right, NULL);
+	VectorSet(offset, 0, 8, ent->viewheight - 8);
+	P_ProjectSource(ent->client, ent->s.origin, offset, forward, right, start);
+	fire_bullet(ent, start, forward, damage, kick, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, MOD_MACHINEGUN);
 
-	gi.WriteByte (svc_muzzleflash);
-	gi.WriteShort (ent-g_edicts);
-	gi.WriteByte (MZ_MACHINEGUN | is_silenced);
-	gi.multicast (ent->s.origin, MULTICAST_PVS);
+	gi.WriteByte(svc_muzzleflash);
+	gi.WriteShort(ent - g_edicts);
+	gi.WriteByte(MZ_MACHINEGUN | is_silenced);
+	gi.multicast(ent->s.origin, MULTICAST_PVS);
 
 	PlayerNoise(ent, start, PNOISE_WEAPON);
 
-	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
+	if (!(((int)dmflags->value & DF_INFINITE_AMMO) || !strcmp(ent->client->pers.weapon->buffs[0].name, "Dec. Ammo Consumption") || 
+	  !strcmp(ent->client->pers.weapon->buffs[1].name, "Dec. Ammo Consumption"))){
 		ent->client->pers.inventory[ent->client->ammo_index]--;
+	}
+	else if (!((int)dmflags->value & DF_INFINITE_AMMO)){
+		
+		int odds;
+		int index;
+		
+		index = FindBuff(ent->client->pers.weapon, "Dec. Ammo Consumption");
+		
+		odds = rand() % 100 + 1;
+		
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 1){
+			if (odds >= 10)
+				ent->client->pers.inventory[ent->client->ammo_index]--;
+		}
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 2){
+			if (odds >= 20)
+				ent->client->pers.inventory[ent->client->ammo_index]--;
+		}
+		
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 3){
+			if (odds >= 30)
+				ent->client->pers.inventory[ent->client->ammo_index]--;
+		}
+	}
 
 	ent->client->anim_priority = ANIM_ATTACK;
 	if (ent->client->ps.pmove.pm_flags & PMF_DUCKED)
@@ -1166,8 +1271,34 @@ void Chaingun_Fire (edict_t *ent)
 
 	PlayerNoise(ent, start, PNOISE_WEAPON);
 
-	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
-		ent->client->pers.inventory[ent->client->ammo_index] -= shots;
+	if (!(((int)dmflags->value & DF_INFINITE_AMMO) || !strcmp(ent->client->pers.weapon->buffs[0].name, "Dec. Ammo Consumption") ||
+		!strcmp(ent->client->pers.weapon->buffs[1].name, "Dec. Ammo Consumption"))){
+		ent->client->pers.inventory[ent->client->ammo_index]--;
+	}
+	else if (!((int)dmflags->value & DF_INFINITE_AMMO)){
+
+		int odds;
+		int index;
+
+		index = FindBuff(ent->client->pers.weapon, "Dec. Ammo Consumption");
+
+		odds = rand() % 100 + 1;
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 1){
+			if (odds >= 10)
+				ent->client->pers.inventory[ent->client->ammo_index]-=shots;
+		}
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 2){
+			if (odds >= 20)
+				ent->client->pers.inventory[ent->client->ammo_index]-=shots;
+		}
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 3){
+			if (odds >= 30)
+				ent->client->pers.inventory[ent->client->ammo_index]-=shots;
+		}
+	}
 }
 
 
@@ -1230,8 +1361,34 @@ void weapon_shotgun_fire (edict_t *ent)
 	ent->client->ps.gunframe++;
 	PlayerNoise(ent, start, PNOISE_WEAPON);
 
-	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
+	if (!(((int)dmflags->value & DF_INFINITE_AMMO) || !strcmp(ent->client->pers.weapon->buffs[0].name, "Dec. Ammo Consumption") ||
+		!strcmp(ent->client->pers.weapon->buffs[1].name, "Dec. Ammo Consumption"))){
 		ent->client->pers.inventory[ent->client->ammo_index]--;
+	}
+	else if (!((int)dmflags->value & DF_INFINITE_AMMO)){
+
+		int odds;
+		int index;
+
+		index = FindBuff(ent->client->pers.weapon, "Dec. Ammo Consumption");
+
+		odds = rand() % 100 + 1;
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 1){
+			if (odds >= 10)
+				ent->client->pers.inventory[ent->client->ammo_index]-=2;
+		}
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 2){
+			if (odds >= 20)
+				ent->client->pers.inventory[ent->client->ammo_index]-=2;
+		}
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 3){
+			if (odds >= 30)
+				ent->client->pers.inventory[ent->client->ammo_index]-=2;
+		}
+	}
 }
 
 void Weapon_Shotgun (edict_t *ent)
@@ -1284,8 +1441,34 @@ void weapon_supershotgun_fire (edict_t *ent)
 	ent->client->ps.gunframe++;
 	PlayerNoise(ent, start, PNOISE_WEAPON);
 
-	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
-		ent->client->pers.inventory[ent->client->ammo_index] -= 2;
+	if (!(((int)dmflags->value & DF_INFINITE_AMMO) || !strcmp(ent->client->pers.weapon->buffs[0].name, "Dec. Ammo Consumption") ||
+		!strcmp(ent->client->pers.weapon->buffs[1].name, "Dec. Ammo Consumption"))){
+		ent->client->pers.inventory[ent->client->ammo_index]--;
+	}
+	else if (!((int)dmflags->value & DF_INFINITE_AMMO)){
+
+		int odds;
+		int index;
+
+		index = FindBuff(ent->client->pers.weapon, "Dec. Ammo Consumption");
+
+		odds = rand() % 100 + 1;
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 1){
+			if (odds >= 10)
+				ent->client->pers.inventory[ent->client->ammo_index]-=2;
+		}
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 2){
+			if (odds >= 20)
+				ent->client->pers.inventory[ent->client->ammo_index]-=2;
+		}
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 3){
+			if (odds >= 30)
+				ent->client->pers.inventory[ent->client->ammo_index]-=2;
+		}
+	}
 }
 
 void Weapon_SuperShotgun (edict_t *ent)
@@ -1349,8 +1532,34 @@ void weapon_railgun_fire (edict_t *ent)
 	ent->client->ps.gunframe++;
 	PlayerNoise(ent, start, PNOISE_WEAPON);
 
-	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
+	if (!(((int)dmflags->value & DF_INFINITE_AMMO) || !strcmp(ent->client->pers.weapon->buffs[0].name, "Dec. Ammo Consumption") ||
+		!strcmp(ent->client->pers.weapon->buffs[1].name, "Dec. Ammo Consumption"))){
 		ent->client->pers.inventory[ent->client->ammo_index]--;
+	}
+	else if (!((int)dmflags->value & DF_INFINITE_AMMO)){
+
+		int odds;
+		int index;
+
+		index = FindBuff(ent->client->pers.weapon, "Dec. Ammo Consumption");
+
+		odds = rand() % 100 + 1;
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 1){
+			if (odds >= 10)
+				ent->client->pers.inventory[ent->client->ammo_index]--;
+		}
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 2){
+			if (odds >= 20)
+				ent->client->pers.inventory[ent->client->ammo_index]--;
+		}
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 3){
+			if (odds >= 30)
+				ent->client->pers.inventory[ent->client->ammo_index]--;
+		}
+	}
 }
 
 
@@ -1425,8 +1634,34 @@ void weapon_bfg_fire (edict_t *ent)
 
 	PlayerNoise(ent, start, PNOISE_WEAPON);
 
-	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
-		ent->client->pers.inventory[ent->client->ammo_index] -= 50;
+	if (!(((int)dmflags->value & DF_INFINITE_AMMO) || !strcmp(ent->client->pers.weapon->buffs[0].name, "Dec. Ammo Consumption") ||
+		!strcmp(ent->client->pers.weapon->buffs[1].name, "Dec. Ammo Consumption"))){
+		ent->client->pers.inventory[ent->client->ammo_index]--;
+	}
+	else if (!((int)dmflags->value & DF_INFINITE_AMMO)){
+
+		int odds;
+		int index;
+
+		index = FindBuff(ent->client->pers.weapon, "Dec. Ammo Consumption");
+
+		odds = rand() % 100 + 1;
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 1){
+			if (odds >= 10)
+				ent->client->pers.inventory[ent->client->ammo_index]-=50;
+		}
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 2){
+			if (odds >= 20)
+				ent->client->pers.inventory[ent->client->ammo_index]-=50;
+		}
+
+		if (ent->client->pers.weapon->buffs[index].currentLevel == 3){
+			if (odds >= 30)
+				ent->client->pers.inventory[ent->client->ammo_index]-=50;
+		}
+	}
 }
 
 void Weapon_BFG (edict_t *ent)
