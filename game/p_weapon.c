@@ -129,6 +129,7 @@ qboolean Pickup_Weapon (edict_t *ent, edict_t *other)
 			return false;	// leave the weapon for others to pickup
 	}
 
+	if (other->client->pers.weapon == NULL)
 	other->client->pers.inventory[index]++;
 
 	if (!(ent->spawnflags & DROPPED_ITEM) )
@@ -153,12 +154,18 @@ qboolean Pickup_Weapon (edict_t *ent, edict_t *other)
 				ent->flags |= FL_RESPAWN;
 		}
 	}
-
-	if (other->client->pers.weapon != ent->item && 
-		(other->client->pers.inventory[index] == 1) &&
-		( !deathmatch->value || other->client->pers.weapon == FindItem("blaster") ) )
-		other->client->newweapon = ent->item;
-
+	if (other->client->pers.weapon != ent->item &&
+		(other->client->pers.inventory[index] == 1)  &&
+		(!deathmatch->value || other->client->pers.weapon == FindItem("blaster"))){
+		if (other->client->pers.weapon == NULL){
+			other->client->newweapon = ent->item;
+			ChangeWeapon(other);
+		}
+		else{
+			gi.centerprintf(other, "cannot hold more than 1 weapon");
+			return false;
+		}
+	}
 	return true;
 }
 
@@ -269,7 +276,8 @@ void NoAmmoWeaponChange (edict_t *ent)
 		ent->client->newweapon = FindItem ("shotgun");
 		return;
 	}
-	ent->client->newweapon = FindItem ("blaster");
+	//ent->client->newweapon = FindItem ("blaster");
+	gi.centerprintf(ent, "out of ammo");
 }
 
 /*
@@ -355,14 +363,16 @@ void Drop_Weapon (edict_t *ent, gitem_t *item)
 
 	index = ITEM_INDEX(item);
 	// see if we're already using it
-	if ( ((item == ent->client->pers.weapon) || (item == ent->client->newweapon))&& (ent->client->pers.inventory[index] == 1) )
+	/*if ( ((item == ent->client->pers.weapon) || (item == ent->client->newweapon))&& (ent->client->pers.inventory[index] == 1) )
 	{
 		gi.cprintf (ent, PRINT_HIGH, "Can't drop current weapon\n");
 		return;
-	}
-
+	}*/
+	
 	Drop_Item (ent, item);
 	ent->client->pers.inventory[index]--;
+	ent->client->newweapon = NULL;
+	ChangeWeapon(ent);
 }
 
 
