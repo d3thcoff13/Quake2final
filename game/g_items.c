@@ -1165,6 +1165,16 @@ void AssignBuffs(gitem_t *ent){
 	}
 }
 
+int FindBuff(gitem_t *ent, char *name){
+	for (int i = 0; i < 3; i++){
+		if (strcmp(ent->buffs[i].name, name))
+			continue;
+		else
+			return i;
+		return 3;
+	}
+}
+
 //======================================================================
 
 gitem_t	itemlist[] = 

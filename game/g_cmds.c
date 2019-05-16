@@ -183,7 +183,7 @@ void Cmd_Give_f (edict_t *ent)
 
 	if (give_all || Q_stricmp(name, "weapons") == 0)
 	{
-		for (i=0 ; i<game.num_items ; i++)
+		/*for (i=0 ; i<game.num_items ; i++)
 		{
 			it = itemlist + i;
 			if (!it->pickup)
@@ -192,7 +192,8 @@ void Cmd_Give_f (edict_t *ent)
 				continue;
 			ent->client->pers.inventory[i] += 1;
 		}
-		if (!give_all)
+		if (!give_all)*/
+		gi.centerprintf(ent, "we don't do that here");
 			return;
 	}
 
@@ -433,9 +434,9 @@ void Cmd_Buffs_f(edict_t *ent)
 void Cmd_SetBuffs_f(edict_t *ent)
 {
 
-	ent->client->pers.weapon->buffs[0].name = "Damage Boost";
+	ent->client->pers.weapon->buffs[1].name = "Dec. Ammo Consumption";
 	ent->client->pers.weapon->buffs[0].currentLevel = 1;
-	ent->client->pers.weapon->buffs[1].name = "Extended Clip";
+	ent->client->pers.weapon->buffs[0].name = "Extended Clip";
 	ent->client->pers.weapon->buffs[1].currentLevel = 1;
 	ent->client->pers.weapon->buffs[2].name = "Decreased Accuracy";
 	ent->client->pers.weapon->buffs[2].currentLevel = 1;

@@ -624,6 +624,7 @@ void SetRespawn (edict_t *ent, float delay);
 void ChangeWeapon (edict_t *ent);
 void SpawnItem (edict_t *ent, gitem_t *item);
 void AssignBuffs(gitem_t *ent);
+int FindBuff(gitem_t *ent, char *name);
 void Think_Weapon (edict_t *ent);
 int ArmorIndex (edict_t *ent);
 int PowerArmorType (edict_t *ent);
