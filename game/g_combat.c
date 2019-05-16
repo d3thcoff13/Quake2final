@@ -123,6 +123,23 @@ void Killed (edict_t *targ, edict_t *inflictor, edict_t *attacker, int damage, v
 	}
 
 	targ->die (targ, inflictor, attacker, damage, point);
+	if (attacker->client){
+		attacker->client->pers.exp += 50;
+		if (attacker->client->pers.exp >= 200){
+			gi.centerprintf(attacker, "LEVEL UP!");
+			attacker->client->pers.exp = 0;
+			if (attacker->client->pers.weapon->buffs[0].currentLevel < 3)
+			attacker->client->pers.weapon->buffs[0].currentLevel++;
+			
+			if (attacker->client->pers.weapon->buffs[1].currentLevel < 3)
+			attacker->client->pers.weapon->buffs[1].currentLevel++;
+			
+			if (attacker->client->pers.weapon->buffs[2].currentLevel < 3)
+			attacker->client->pers.weapon->buffs[2].currentLevel++;
+
+
+		}
+	}
 }
 
 

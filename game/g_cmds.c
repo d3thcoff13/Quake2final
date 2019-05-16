@@ -422,6 +422,21 @@ void Cmd_Use_f (edict_t *ent)
 }
 
 
+void Cmd_Buffs_f(edict_t *ent)
+{
+	gi.centerprintf(ent, "Buff 1:\n  %s Level %d\n Buff 2:\n %s Level %d\n Buff 3:\n %s Level %d\n Current Exp: %d", ent->client->pers.weapon->buffs[0].name, ent->client->pers.weapon->buffs[0].currentLevel, ent->client->pers.weapon->buffs[1].name, ent->client->pers.weapon->buffs[1].currentLevel, ent->client->pers.weapon->buffs[2].name, ent->client->pers.weapon->buffs[2].currentLevel, ent->client->pers.exp);
+}
+
+void Cmd_SetBuffs_f(edict_t *ent)
+{
+
+	ent->client->pers.weapon->buffs[0].name = "Damage Boost";
+	ent->client->pers.weapon->buffs[0].currentLevel = 1;
+	ent->client->pers.weapon->buffs[1].name = "Extended Clip";
+	ent->client->pers.weapon->buffs[1].currentLevel = 1;
+	ent->client->pers.weapon->buffs[2].name = "Decreased Accuracy";
+	ent->client->pers.weapon->buffs[2].currentLevel = 1;
+}
 /*
 ==================
 Cmd_Drop_f
@@ -947,6 +962,10 @@ void ClientCommand (edict_t *ent)
 		Cmd_Use_f (ent);
 	else if (Q_stricmp (cmd, "drop") == 0)
 		Cmd_Drop_f (ent);
+	else if (Q_stricmp(cmd, "buffs") == 0)
+		Cmd_Buffs_f(ent);
+	else if (Q_stricmp(cmd, "setbuffs") == 0)
+		Cmd_SetBuffs_f(ent);
 	else if (Q_stricmp (cmd, "give") == 0)
 		Cmd_Give_f (ent);
 	else if (Q_stricmp (cmd, "god") == 0)

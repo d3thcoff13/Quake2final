@@ -230,6 +230,12 @@ typedef struct
 #define WEAP_HYPERBLASTER		9 
 #define WEAP_RAILGUN			10
 #define WEAP_BFG				11
+typedef struct //gbuff_s
+{
+	char *name;
+	int currentLevel;
+
+}gbuff_t;
 
 typedef struct gitem_s
 {
@@ -258,6 +264,7 @@ typedef struct gitem_s
 	int			tag;
 
 	char		*precaches;		// string of all models, sounds, and images this item will use
+	gbuff_t		buffs[3];
 } gitem_t;
 
 
@@ -862,6 +869,7 @@ typedef struct
 	int			helpchanged;
 
 	qboolean	spectator;			// client is a spectator
+	int			exp;
 } client_persistant_t;
 
 // client data that stays across deathmatch respawns
@@ -960,7 +968,6 @@ struct gclient_s
 	edict_t		*chase_target;		// player we are chasing
 	qboolean	update_chase;		// need to update chase info?
 };
-
 
 struct edict_s
 {
