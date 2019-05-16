@@ -1127,6 +1127,42 @@ void SpawnItem (edict_t *ent, gitem_t *item)
 	ent->s.renderfx = RF_GLOW;
 	if (ent->model)
 		gi.modelindex (ent->model);
+	if (ent->spawnflags != DROPPED_ITEM){
+		srand(time(NULL));
+		AssignBuffs(ent->item);
+	}
+	
+}
+
+//======================================================================
+gbuff_t bufflist[] = { 
+"Inc. Clip Size", 1, 
+"Inc. Accuracy", 1, 
+"Inc. Damage", 1, 
+"Inc. Rate of Fire", 1, 
+"Inc. Reload Speed", 1, 
+"Healing Bullets", 1, 
+"Inc. Ammo Pickup", 1, 
+"Inc. Max Ammo", 1, 
+"Dec. Ammo Consumption", 1, 
+"Inc. Range", 1, 
+"Dec. Damage", 1, 
+"Dec. Reload Speed", 1, 
+"Dec. Accuracy", 1, 
+"Dec. Rate of Fire", 1, 
+"Dbl. Ammo Consumption", 1
+};
+//======================================================================
+void AssignBuffs(gitem_t *ent){
+	
+	ent->buffs[0] = bufflist[rand() % 10];
+	ent->buffs[1] = bufflist[rand() % 10];
+	ent->buffs[2] = bufflist[rand() % 5 + 10];
+
+	while (!strcmp(ent->buffs[0].name, ent->buffs[1].name)){
+
+		ent->buffs[1] = bufflist[rand() % 10];
+	}
 }
 
 //======================================================================

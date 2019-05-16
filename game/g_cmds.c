@@ -424,7 +424,10 @@ void Cmd_Use_f (edict_t *ent)
 
 void Cmd_Buffs_f(edict_t *ent)
 {
-	gi.centerprintf(ent, "Buff 1:\n  %s Level %d\n Buff 2:\n %s Level %d\n Buff 3:\n %s Level %d\n Current Exp: %d", ent->client->pers.weapon->buffs[0].name, ent->client->pers.weapon->buffs[0].currentLevel, ent->client->pers.weapon->buffs[1].name, ent->client->pers.weapon->buffs[1].currentLevel, ent->client->pers.weapon->buffs[2].name, ent->client->pers.weapon->buffs[2].currentLevel, ent->client->pers.exp);
+	if (ent->client->pers.weapon == NULL)
+		gi.centerprintf(ent, "You have no active buffs or debuffs. \n\n Experience: %d", ent->client->pers.exp);
+	else
+		gi.centerprintf(ent, "Buff 1:\n  %s Level %d\n Buff 2:\n %s Level %d\n Buff 3:\n %s Level %d\n Current Exp: %d", ent->client->pers.weapon->buffs[0].name, ent->client->pers.weapon->buffs[0].currentLevel, ent->client->pers.weapon->buffs[1].name, ent->client->pers.weapon->buffs[1].currentLevel, ent->client->pers.weapon->buffs[2].name, ent->client->pers.weapon->buffs[2].currentLevel, ent->client->pers.exp);
 }
 
 void Cmd_SetBuffs_f(edict_t *ent)

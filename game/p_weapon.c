@@ -154,19 +154,16 @@ qboolean Pickup_Weapon (edict_t *ent, edict_t *other)
 				ent->flags |= FL_RESPAWN;
 		}
 	}
-	if (other->client->pers.weapon != ent->item &&
-		(other->client->pers.inventory[index] == 1)  &&
-		(!deathmatch->value || other->client->pers.weapon == FindItem("blaster"))){
-		if (other->client->pers.weapon == NULL){
-			other->client->newweapon = ent->item;
-			ChangeWeapon(other);
-		}
-		else{
-			gi.centerprintf(other, "cannot hold more than 1 weapon");
-			return false;
-		}
+	if (other->client->pers.weapon == NULL){
+		other->client->newweapon = ent->item;
+		ChangeWeapon(other);
+		return true;
 	}
-	return true;
+	else
+	{
+		gi.centerprintf(other, "cannot hold more than 1 weapon");
+		return false;
+	}
 }
 
 
@@ -368,11 +365,11 @@ void Drop_Weapon (edict_t *ent, gitem_t *item)
 		gi.cprintf (ent, PRINT_HIGH, "Can't drop current weapon\n");
 		return;
 	}*/
-	
 	Drop_Item (ent, item);
 	ent->client->pers.inventory[index]--;
 	ent->client->newweapon = NULL;
 	ChangeWeapon(ent);
+	ent->client->pers.exp = 0;
 }
 
 
