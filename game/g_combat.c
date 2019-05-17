@@ -510,17 +510,19 @@ void T_Damage (edict_t *targ, edict_t *inflictor, edict_t *attacker, vec3_t dir,
 
 
 		targ->health = targ->health - take;
-		if (!strcmp(attacker->client->pers.weapon->buffs[0].name, "Healing Bullets") || !strcmp(attacker->client->pers.weapon->buffs[1].name, "Healing Bullets")){
-			int index;
-			index = FindBuff(attacker->client->pers.weapon, "Healing Bullets");
-			if (attacker->client->pers.weapon->buffs[index].currentLevel == 1)
-				attacker->health += take / 4;
+		if (attacker->client){
+			if (!strcmp(attacker->client->pers.weapon->buffs[0].name, "Healing Bullets") || !strcmp(attacker->client->pers.weapon->buffs[1].name, "Healing Bullets")){
+				int index;
+				index = FindBuff(attacker->client->pers.weapon, "Healing Bullets");
+				if (attacker->client->pers.weapon->buffs[index].currentLevel == 1)
+					attacker->health += take / 4;
 
-			if (attacker->client->pers.weapon->buffs[index].currentLevel == 2)
-				attacker->health += take/2;
+				if (attacker->client->pers.weapon->buffs[index].currentLevel == 2)
+					attacker->health += take / 2;
 
-			if (attacker->client->pers.weapon->buffs[index].currentLevel == 3)
-				attacker->health *= take;
+				if (attacker->client->pers.weapon->buffs[index].currentLevel == 3)
+					attacker->health *= take;
+			}
 		}
 			
 		if (targ->health <= 0)
