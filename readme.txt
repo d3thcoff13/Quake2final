@@ -5,21 +5,8 @@ while lowering the strength of your debuffs. If you drop a weapon, all experienc
 back up immediately. You can check what buffs and debuffs you have with F. It'll also show you how much experience you have.
 
 Buffs
------
-1.Increased clip size
-2.Decreased spread
-3.increased damage
-4.increased rate of fire
-5.increased reload speed
-6.healing bullets
-7.more ammo from pickups
-8.increased ammo reserves
-9.lower ammo consumption
+Inc. Armor, Dec. Received Damage, Inc. Damage, Inc. Rate of Fire, Inc. Reload Speed, Healing Bullets,
+Inc. Ammo Pickup, Inc. Max Ammo, Dec. Ammo Consumption, Inc. Range
 
-Debuffs
---------
-1.Decreased damage
-2.decreased reload speed
-3.increased spread
-4.decreased rate of fire
-5.double ammo consumption
+Debuffs:
+Dec. Damage, Inc. Received Damage, Dec. Ammo Pickup, Dec. Rate of Fire, Dbl. Ammo Consumption
