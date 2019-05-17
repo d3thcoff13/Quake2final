@@ -121,7 +121,6 @@ void Killed (edict_t *targ, edict_t *inflictor, edict_t *attacker, int damage, v
 		targ->touch = NULL;
 		monster_death_use (targ);
 	}
-
 	targ->die (targ, inflictor, attacker, damage, point);
 	if (attacker->client){
 		attacker->client->pers.exp += 50;

@@ -639,6 +639,7 @@ void InitClientPersistant (gclient_t *client)
 	ammo = FindItem(item->ammo);
 	Add_Ammo(client->player, ammo, ammo->quantity);
 
+
 	client->pers.connected = true;
 }
 

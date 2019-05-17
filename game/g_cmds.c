@@ -433,7 +433,7 @@ void Cmd_Buffs_f(edict_t *ent)
 
 void Cmd_SetBuffs_f(edict_t *ent)
 {
-	ent->client->pers.weapon->buffs[1].name = "Inc. Max Ammo";
+	ent->client->pers.weapon->buffs[1].name = "Inc. Armor";
 	ent->client->pers.weapon->buffs[0].currentLevel = 1;
 	ent->client->pers.weapon->buffs[0].name = "Extended Clip";
 	ent->client->pers.weapon->buffs[1].currentLevel = 1;

@@ -628,6 +628,17 @@ qboolean Pickup_Armor (edict_t *ent, edict_t *other)
 	// get info on new armor
 	newinfo = (gitem_armor_t *)ent->item->info;
 
+	if (!strcmp(other->client->pers.weapon->buffs[0].name, "Inc. Armor") || !strcmp(other->client->pers.weapon->buffs[1].name, "Inc. Armor")){
+		int index;
+		index = FindBuff(other->client->pers.weapon, "Inc. Armor");
+		if (other->client->pers.weapon->buffs[index].currentLevel == 1)
+			newinfo->base_count += newinfo->base_count/4;
+		if (other->client->pers.weapon->buffs[index].currentLevel == 2)
+			newinfo->base_count += newinfo->base_count/2;
+
+		if (other->client->pers.weapon->buffs[index].currentLevel == 3)
+			newinfo->base_count += newinfo->base_count;
+	}
 	old_armor_index = ArmorIndex (other);
 
 	// handle armor shards specially
@@ -1148,8 +1159,8 @@ void SpawnItem (edict_t *ent, gitem_t *item)
 
 //======================================================================
 gbuff_t bufflist[] = { 
-"Inc. Clip Size", 1, 
-"Inc. Accuracy", 1, 
+"Inc. Armor", 1, 
+"Dec. Received Damage", 1, 
 "Inc. Damage", 1, 
 "Inc. Rate of Fire", 1, 
 "Inc. Reload Speed", 1, 
@@ -1159,8 +1170,8 @@ gbuff_t bufflist[] = {
 "Dec. Ammo Consumption", 1, 
 "Inc. Range", 1, 
 "Dec. Damage", 1, 
-"Dec. Reload Speed", 1, 
-"Dec. Accuracy", 1, 
+"Inc. Received Damage", 1, 
+"Dec. Ammo Pickup", 1, 
 "Dec. Rate of Fire", 1, 
 "Dbl. Ammo Consumption", 1
 };
