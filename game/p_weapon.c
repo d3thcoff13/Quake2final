@@ -438,7 +438,7 @@ void Drop_Weapon (edict_t *ent, gitem_t *item)
 		gi.cprintf (ent, PRINT_HIGH, "Can't drop current weapon\n");
 		return;
 	}*/
-	ammo = FindItem(ent->item->ammo);
+	/*ammo = FindItem(ent->item->ammo);
 	switch (ammo->tag){
 	case AMMO_BULLETS:
 			ent->client->pers.max_bullets += 200;
@@ -452,7 +452,7 @@ void Drop_Weapon (edict_t *ent, gitem_t *item)
 		ent->client->pers.max_cells += 200;
 	case AMMO_SLUGS:
 		ent->client->pers.max_slugs += 50;
-	}
+	}*/
 	ent->client->pers.weapon->buffs[0].currentLevel = 1;
 	ent->client->pers.weapon->buffs[1].currentLevel = 1;
 	ent->client->pers.weapon->buffs[2].currentLevel = 1;
@@ -1162,17 +1162,34 @@ void Machinegun_Fire(edict_t *ent)
 		return;
 	}
 
+	
 	if (!strcmp(ent->client->pers.weapon->buffs[0].name, "Inc. Damage") || !strcmp(ent->client->pers.weapon->buffs[1].name, "Inc. Damage")){
 		int index;
 		index = FindBuff(ent->client->pers.weapon, "Inc. Damage");
-		if (ent->client->pers.weapon->buffs[index].currentLevel == 1)
-			damage *= 2;
+		if (!strcmp(ent->client->pers.weapon->buffs[2].name, "Dec. Damage")){
+			damage = damage;
+		}
+		else{
+			if (ent->client->pers.weapon->buffs[index].currentLevel == 1)
+				damage *= 2;
 
-		if (ent->client->pers.weapon->buffs[index].currentLevel == 2)
-			damage *= 3;
+			if (ent->client->pers.weapon->buffs[index].currentLevel == 2)
+				damage *= 3;
 
-		if (ent->client->pers.weapon->buffs[index].currentLevel == 3)
-			damage *= 4;
+			if (ent->client->pers.weapon->buffs[index].currentLevel == 3)
+				damage *= 4;
+		}
+	}
+
+	if (!strcmp(ent->client->pers.weapon->buffs[2].name, "Dec. Damage") && strcmp(ent->client->pers.weapon->buffs[0].name, "Inc. Damage") && strcmp(ent->client->pers.weapon->buffs[1].name, "Inc. Damage")){
+		if (ent->client->pers.weapon->buffs[2].currentLevel == 1)
+			damage /= 2;
+
+		if (ent->client->pers.weapon->buffs[2].currentLevel == 2)
+			damage /= 4;
+
+		if (ent->client->pers.weapon->buffs[2].currentLevel == 3)
+			damage;
 	}
 
 	if (is_quad)
