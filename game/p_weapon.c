@@ -157,8 +157,82 @@ qboolean Pickup_Weapon (edict_t *ent, edict_t *other)
 	if (other->client->pers.weapon == NULL){
 		other->client->newweapon = ent->item;
 		ChangeWeapon(other);
+		
+		if (!strcmp(other->client->pers.weapon->buffs[0].name, "Inc. Max Ammo") || !strcmp(other->client->pers.weapon->buffs[1].name, "Inc. Max Ammo")){
+			int index;
+			gitem_t *ammo;
+			
+			index = FindBuff(other->client->pers.weapon, "Inc. Max Ammo");
+			ammo = FindItem(ent->item->ammo);
+
+			switch(ammo->tag){
+				case AMMO_BULLETS:
+					if (other->client->pers.weapon->buffs[index].currentLevel == 1){
+						other->client->pers.max_bullets += other->client->pers.max_bullets / 4;
+					}
+					else if (other->client->pers.weapon->buffs[index].currentLevel == 2){
+						other->client->pers.max_bullets += other->client->pers.max_bullets / 2;
+					}
+					else if (other->client->pers.weapon->buffs[index].currentLevel == 3){
+						other->client->pers.max_bullets += other->client->pers.max_bullets;
+					}
+				case AMMO_SHELLS:
+					if (other->client->pers.weapon->buffs[index].currentLevel == 1){
+						other->client->pers.max_bullets += other->client->pers.max_shells / 4;
+					}
+					else if (other->client->pers.weapon->buffs[index].currentLevel == 2){
+						other->client->pers.max_bullets += other->client->pers.max_shells / 2;
+					}
+					else if (other->client->pers.weapon->buffs[index].currentLevel == 3){
+						other->client->pers.max_bullets += other->client->pers.max_shells;
+					}
+				case AMMO_ROCKETS:
+					if (other->client->pers.weapon->buffs[index].currentLevel == 1){
+						other->client->pers.max_bullets += other->client->pers.max_rockets / 4;
+					}
+					else if (other->client->pers.weapon->buffs[index].currentLevel == 2){
+						other->client->pers.max_bullets += other->client->pers.max_rockets / 2;
+					}
+					else if (other->client->pers.weapon->buffs[index].currentLevel == 3){
+						other->client->pers.max_bullets += other->client->pers.max_rockets;
+					}
+				case AMMO_GRENADES:
+					if (other->client->pers.weapon->buffs[index].currentLevel == 1){
+						other->client->pers.max_bullets += other->client->pers.max_grenades / 4;
+					}
+					else if (other->client->pers.weapon->buffs[index].currentLevel == 2){
+						other->client->pers.max_bullets += other->client->pers.max_grenades / 2;
+					}
+					else if (other->client->pers.weapon->buffs[index].currentLevel == 3){
+						other->client->pers.max_bullets += other->client->pers.max_grenades;
+					}
+				case AMMO_CELLS:
+					if (other->client->pers.weapon->buffs[index].currentLevel == 1){
+						other->client->pers.max_bullets += other->client->pers.max_cells / 4;
+					}
+					else if (other->client->pers.weapon->buffs[index].currentLevel == 2){
+						other->client->pers.max_bullets += other->client->pers.max_cells / 2;
+					}
+					else if (other->client->pers.weapon->buffs[index].currentLevel == 3){
+						other->client->pers.max_bullets += other->client->pers.max_cells;
+					}
+				case AMMO_SLUGS:
+					if (other->client->pers.weapon->buffs[index].currentLevel == 1){
+						other->client->pers.max_bullets += other->client->pers.max_slugs / 4;
+					}
+					else if (other->client->pers.weapon->buffs[index].currentLevel == 2){
+						other->client->pers.max_bullets += other->client->pers.max_slugs / 2;
+					}
+					else if (other->client->pers.weapon->buffs[index].currentLevel == 3){
+						other->client->pers.max_bullets += other->client->pers.max_slugs;
+					}
+			}
+			
+			
+		}
 		return true;
 	}
+	
 	if (ent->item->flags & IT_AMMO)
 		return true;
 	gi.centerprintf(other, "cannot hold more than 1 weapon");
@@ -353,10 +427,10 @@ Drop_Weapon
 void Drop_Weapon (edict_t *ent, gitem_t *item)
 {
 	int		index;
+	gitem_t *ammo;
 
 	if ((int)(dmflags->value) & DF_WEAPONS_STAY)
 		return;
-
 	index = ITEM_INDEX(item);
 	// see if we're already using it
 	/*if ( ((item == ent->client->pers.weapon) || (item == ent->client->newweapon))&& (ent->client->pers.inventory[index] == 1) )
@@ -364,11 +438,30 @@ void Drop_Weapon (edict_t *ent, gitem_t *item)
 		gi.cprintf (ent, PRINT_HIGH, "Can't drop current weapon\n");
 		return;
 	}*/
+	ammo = FindItem(ent->item->ammo);
+	switch (ammo->tag){
+	case AMMO_BULLETS:
+			ent->client->pers.max_bullets += 200;
+	case AMMO_SHELLS:
+		ent->client->pers.max_shells += 100;
+	case AMMO_ROCKETS:
+		ent->client->pers.max_rockets += 50;
+	case AMMO_GRENADES:
+		ent->client->pers.max_grenades += 50;
+	case AMMO_CELLS:
+		ent->client->pers.max_cells += 200;
+	case AMMO_SLUGS:
+		ent->client->pers.max_slugs += 50;
+	}
+	ent->client->pers.weapon->buffs[0].currentLevel = 1;
+	ent->client->pers.weapon->buffs[1].currentLevel = 1;
+	ent->client->pers.weapon->buffs[2].currentLevel = 1;
 	Drop_Item (ent, item);
 	ent->client->pers.inventory[index]--;
 	ent->client->newweapon = NULL;
 	ChangeWeapon(ent);
 	ent->client->pers.exp = 0;
+
 }
 
 
