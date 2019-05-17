@@ -435,7 +435,7 @@ void Cmd_SetBuffs_f(edict_t *ent)
 {
 	float flo;
 	flo = crandom();
-	ent->client->pers.weapon->buffs[1].name = "Inc. Accuracy";
+	ent->client->pers.weapon->buffs[1].name = "Inc. Ammo Pickup";
 	ent->client->pers.weapon->buffs[0].currentLevel = 1;
 	ent->client->pers.weapon->buffs[0].name = "Extended Clip";
 	ent->client->pers.weapon->buffs[1].currentLevel = 1;

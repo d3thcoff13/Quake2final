@@ -496,6 +496,18 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 
 	oldcount = other->client->pers.inventory[ITEM_INDEX(ent->item)];
 
+	if (!strcmp(other->client->pers.weapon->buffs[0].name, "Inc. Ammo Pickup") || !strcmp(other->client->pers.weapon->buffs[1].name, "Inc. Ammo Pickup")){
+		int index;
+		index = FindBuff(other->client->pers.weapon, "Inc. Ammo Pickup");
+		if (other->client->pers.weapon->buffs[index].currentLevel == 1)
+			count += count/4;
+		if (other->client->pers.weapon->buffs[index].currentLevel == 2)
+			count += count/3;
+
+		if (other->client->pers.weapon->buffs[index].currentLevel == 3)
+			count += count/2;
+	}
+
 	if (!Add_Ammo (other, ent->item, count))
 		return false;
 
