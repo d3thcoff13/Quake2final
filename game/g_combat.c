@@ -486,6 +486,18 @@ void T_Damage (edict_t *targ, edict_t *inflictor, edict_t *attacker, vec3_t dir,
 		save = damage;
 	}
 
+	if (!strcmp(targ->client->pers.weapon->buffs[0].name, "Dec. Received Damage") || !strcmp(targ->client->pers.weapon->buffs[1].name, "Dec. Received Damage")){
+		int index;
+		index = FindBuff(targ->client->pers.weapon, "Dec. Received Damage");
+		if (targ->client->pers.weapon->buffs[index].currentLevel == 1)
+			damage = damage / 2;
+		if (targ->client->pers.weapon->buffs[index].currentLevel == 2)
+			damage = damage / 3;
+
+		if (targ->client->pers.weapon->buffs[index].currentLevel == 3)
+			damage = damage/4 ;
+	}
+
 	psave = CheckPowerArmor (targ, point, normal, take, dflags);
 	take -= psave;
 
