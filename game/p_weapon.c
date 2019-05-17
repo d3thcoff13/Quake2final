@@ -438,21 +438,21 @@ void Drop_Weapon (edict_t *ent, gitem_t *item)
 		gi.cprintf (ent, PRINT_HIGH, "Can't drop current weapon\n");
 		return;
 	}*/
-	/*ammo = FindItem(ent->item->ammo);
+	ammo = FindItem(item->ammo);
 	switch (ammo->tag){
 	case AMMO_BULLETS:
-			ent->client->pers.max_bullets += 200;
+			ent->client->pers.max_bullets = 200;
 	case AMMO_SHELLS:
-		ent->client->pers.max_shells += 100;
+		ent->client->pers.max_shells = 100;
 	case AMMO_ROCKETS:
-		ent->client->pers.max_rockets += 50;
+		ent->client->pers.max_rockets = 50;
 	case AMMO_GRENADES:
-		ent->client->pers.max_grenades += 50;
+		ent->client->pers.max_grenades = 50;
 	case AMMO_CELLS:
-		ent->client->pers.max_cells += 200;
+		ent->client->pers.max_cells = 200;
 	case AMMO_SLUGS:
-		ent->client->pers.max_slugs += 50;
-	}*/
+		ent->client->pers.max_slugs = 50;
+	}
 	ent->client->pers.weapon->buffs[0].currentLevel = 1;
 	ent->client->pers.weapon->buffs[1].currentLevel = 1;
 	ent->client->pers.weapon->buffs[2].currentLevel = 1;
